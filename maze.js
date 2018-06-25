@@ -14,24 +14,24 @@ let avatarCol;
 // The static parts of the map will be a grid of flex positioned divs.
 // They will get created here, and never modified again.
 // The moving player will be an absolutely positioned div on top.
-for(let row = 0; row < map.length; row++) {
+for (let row = 0; row < map.length; row++) {
     const rowStr = map[row];
     const rowDiv = document.createElement("div");
 
     rowDiv.className = "row";
-    
-    for(let i = 0; i < rowStr.length; i++) {
+
+    for (let i = 0; i < rowStr.length; i++) {
         let cellClass = rowStr[i];
         const cellDiv = document.createElement("div");
 
         cellDiv.className = "cell " + cellClass;
 
-        if(cellClass === "S") {
+        if (cellClass === "S") {
             avatarCol = i;
             avatarRow = row;
         }
 
-        if(cellClass === "S" || cellClass === "F") {
+        if (cellClass === "S" || cellClass === "F") {
             cellDiv.innerHTML = cellClass;
         }
 
@@ -46,8 +46,8 @@ for(let row = 0; row < map.length; row++) {
 // Set a timeout to remove the animation class after the animation completes.
 function redrawAvatar() {
     avatar.className = "";
-    avatar.style.top = avatarRow*delta + "px";
-    avatar.style.left = avatarCol*delta + "px";
+    avatar.style.top = avatarRow * delta + "px";
+    avatar.style.left = avatarCol * delta + "px";
 }
 
 // Move the player's avatar in the specified direction
@@ -61,16 +61,17 @@ function move(dRow, dCol) {
     // determine how many columns to move the player.
 
 
+
     // Using avatarRow and dRow, compute destRow (where the player should move
     // vertically). You'll need to replace "undefined" to do so.
-    const destRow = undefined; 
+    const destRow = avatarRow + dRow;
     // Using avatarCOl and dCol, compute destCol (where the player should move
     // vertically). You'll need to replace "undefined" to do so.
-    const destCol = undefined;
+    const destCol = avatarCol + dCol;
     const destCell = map[destRow][destCol];
 
     // Check that it is within the bounds of the map, and not a wall.
-    if(destCell && destCell !== "W") {
+    if (destCell && destCell !== "W") {
         avatarRow += dRow;
         avatarCol += dCol;
         redrawAvatar();
@@ -81,7 +82,7 @@ function move(dRow, dCol) {
 }
 
 function checkForWin() {
-    if(map[avatarRow][avatarCol] === "F") {
+    if (map[avatarRow][avatarCol] === "F") {
         youWonDiv.classList.remove("hidden");
         const audio = new Audio('wow.mp3');
         audio.play();
@@ -89,8 +90,20 @@ function checkForWin() {
 }
 
 document.addEventListener('keydown', (event) => {
+    if (event.key === "ArrowUp") {
+        move(-1, 0)
+    }
+    if (event.key === "ArrowDown") {
+        move(1, 0)
+    }
+    if (event.key === "ArrowRight") {
+        move(0, 1)
+    }
+    if (event.key === "ArrowLeft") {
+        move(0, -1)
+    }
     // STEP 2 -----------------------------------------------------------------/
-    
+
     // "move" takes 2 arguments: a row offset, and a column offset.  For example
     // move(1, 0) would move the player 1 square down and 0 squares to the
     // right.
